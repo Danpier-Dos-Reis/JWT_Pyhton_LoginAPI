@@ -1,0 +1,16 @@
+.nav_container h1{
+    margin-bottom: 4px;
+}
+
+.ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+li{list-style-type: none; }
+
+a{ text-decoration: none; color: darkblue; font-weight: bold;}

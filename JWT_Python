@@ -1,0 +1,12 @@
+server {
+    listen 8888;
+    listen [::]:8888;
+
+    root /var/www/html/JWT_Python_LoginAPI/UI;
+
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
