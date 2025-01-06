@@ -1,4 +1,12 @@
 function LookAllUsers() {
+    const getAllUsers = async (e:React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        
+    }
+    
+
+
     return (
         <div className="form-container">
             <h2>Ver todo</h2>
