@@ -5,8 +5,6 @@ function LookAllUsers() {
         
     }
     
-
-
     return (
         <div className="form-container">
             <h2>Ver todo</h2>

@@ -1,10 +1,10 @@
 from Engine.engine import Engine
-from fastapi import FastAPI
+from fastapi import FastAPI, Body, Query
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 # origins = [
-#     "http://192.169.1.116",
-#     "http://localhost"
+#     "http://192.168.1.139"
 # ]
 
 app = FastAPI()
@@ -25,6 +25,21 @@ engine = Engine()
 @app.get("/get_all_users")
 def all_users():
     return engine.get_all_users()
+
+# Endpoint para obtener un usuario por ID con token
+@app.get("/get_user")
+def get_user(token: str = Query(...), user_id: int = Query(...)):
+    return engine.get_user_by_id(token, user_id)
+
+# Endpoint para crear un usuario
+@app.post("/create_user")
+def create_user(
+    nombre: str = Body(...),
+    telefono: str = Body(None),
+    edad: int = Body(None),
+    passw: str = Body(...)
+):
+    return engine.create_user(nombre, telefono, edad, passw)
 
 if __name__ == "__main__":
     import uvicorn
