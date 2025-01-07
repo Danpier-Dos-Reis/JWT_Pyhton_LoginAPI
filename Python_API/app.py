@@ -23,8 +23,8 @@ engine = Engine()
 
 # Endpoint para obtener todos los usuarios
 @app.get("/get_all_users")
-def all_users():
-    return engine.get_all_users()
+def all_users(token:str = Query(...)):
+    return engine.get_all_users(token)
 
 # Endpoint para obtener un usuario por ID con token
 @app.get("/get_user")

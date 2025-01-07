@@ -6,6 +6,7 @@ function RegisterForm() {
     const [telefono, setTelefono] = useState("");
     const [edad, setEdad] = useState("");
     const [passw, setPassw] = useState("");
+    const [token, setToken] = useState("");
 
     const handleSubmit = async (e:any) => {
         e.preventDefault();
@@ -20,7 +21,12 @@ function RegisterForm() {
                 body: JSON.stringify(userData),
             });
 
+            if(!response.ok){
+                throw new Error("Error en la solicitud");
+            }
+
             const result = await response.json();
+            setToken(result.token);
             alert("Usuario registrado exitosamente. Token: " + result.token);
             console.log(result.token);
         } catch (error) {
@@ -74,6 +80,12 @@ function RegisterForm() {
 
                 <button type="submit">Registrar</button>
             </form>
+            {token && (
+                <div className="user-data">
+                    <h3>Token del Usuario:</h3>
+                    <pre style={{textAlign:"left"}}>{token}</pre>
+                </div>
+            )}
         </div>
     );
 }

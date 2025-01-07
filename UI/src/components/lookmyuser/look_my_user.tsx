@@ -61,7 +61,7 @@ function LookMyUser() {
             {userData && (
                 <div className="user-data">
                     <h3>Datos del Usuario:</h3>
-                    <pre>{JSON.stringify(userData, null, 2)}</pre>
+                    <pre style={{textAlign:"left"}}>{JSON.stringify(userData, null, 2)}</pre>
                 </div>
             )}
         </div>
