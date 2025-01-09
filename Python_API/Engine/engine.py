@@ -77,29 +77,10 @@ class Engine:
                 }
                 for valor in personas
             }
-
-        # if personas:
-        #     json_result = [
-        #         {
-        #             "id": persona.id,
-        #             "nombre": persona.nombre,
-        #             "edad": persona.edad,
-        #             "telefono": persona.telefono,
-        #             "password": persona.passw
-        #         }
-        #         for persona in personas
-        #     ]
             return JSONResponse(json_result)
         else:
             return JSONResponse(content={"error": "Usuario no encontrado"}, status_code=404)
-
-    def create_user(self, nombre, telefono, edad, contrasena):
-        lastId:int = self.dal.create_user(nombre, telefono, edad, contrasena)
-        token = self.generate_token(lastId)
-        self.dal.insert_token(lastId,token)
-
-        return JSONResponse(content={"token": token})
-
+        
     def get_user_by_id(self, token, user_id):
         token_verified = self.verify_token(token)
         if isinstance(token_verified, str):
@@ -117,3 +98,19 @@ class Engine:
             return JSONResponse(content=persona.dict())
         else:
             return JSONResponse(content={"error": "Usuario no encontrado"}, status_code=404)
+
+    def get_user_token(self, username, password):
+        data = self.dal.get_user_token(username, password)
+    
+        if data:
+            token = data[0]
+            return JSONResponse(content={"token": token})
+        else:
+            return JSONResponse(content={"error": "No se pudo devolver el token"}, status_code=404)
+
+    def create_user(self, nombre, telefono, edad, contrasena):
+        lastId:int = self.dal.create_user(nombre, telefono, edad, contrasena)
+        token = self.generate_token(lastId)
+        self.dal.insert_token(lastId,token)
+
+        return JSONResponse(content={"token": token})

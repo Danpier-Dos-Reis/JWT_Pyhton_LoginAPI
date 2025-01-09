@@ -30,6 +30,11 @@ def all_users(token:str = Query(...)):
 def get_user(token: str = Query(...), user_id: int = Query(...)):
     return engine.get_user_by_id(token, user_id)
 
+# Endpoint para obtener el token un usuario
+@app.get("/get_user_token")
+def get_user_token(nombre: str = Query(...), password: str = Query(...)):
+    return engine.get_user_token(nombre, password)
+
 # Endpoint para crear un usuario
 @app.post("/create_user")
 def create_user(

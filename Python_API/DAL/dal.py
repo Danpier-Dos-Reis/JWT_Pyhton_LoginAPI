@@ -49,9 +49,21 @@ class DAL:
 
     def get_user_by_id(self, user_id):
         query = "SELECT * FROM Persona WHERE Id = ?"
-        self.cursor.execute(query, (user_id,))
+        self.cursor.execute(query, (user_id))
         return self.cursor.fetchone()
+    
+    def get_user_token(self, username, password):
+        encrypted_passw = hashlib.sha256(password.encode()).hexdigest()
 
+        query = "SELECT ut.user_token FROM Persona p INNER JOIN UserToken ut ON p.id = ut.id_user WHERE nombre = ? and passw = ?"
+        self.cursor.execute(query, (username, encrypted_passw))
+        result = self.cursor.fetchone()
+
+        if result:
+            return result
+        else:
+            return None
+        
     def update_user(self, user_id, nombre=None, telefono=None, edad=None, passw=None):
         updates = []
         params = []
