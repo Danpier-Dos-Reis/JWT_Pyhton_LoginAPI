@@ -51,12 +51,12 @@ class Engine:
 
         if isinstance(token_verified, str):
             return JSONResponse(content={"error": token_verified}, status_code=401)
-        
+
         personas_db = self.dal.get_all_users()
         if personas_db:
             personas = [
                 Persona(
-                Id=valor[0],
+                id=valor[0],
                 nombre=valor[1],
                 telefono=valor[2],
                 edad=valor[3],
@@ -70,7 +70,7 @@ class Engine:
         if personas:
             json_result = {
                 valor.nombre:{
-                    "id": valor.Id,
+                    "id": valor.id,
                     "edad": valor.edad,
                     "telefono": valor.telefono,
                     "password": valor.passw
@@ -81,7 +81,7 @@ class Engine:
         # if personas:
         #     json_result = [
         #         {
-        #             "id": persona.Id,
+        #             "id": persona.id,
         #             "nombre": persona.nombre,
         #             "edad": persona.edad,
         #             "telefono": persona.telefono,
@@ -94,8 +94,10 @@ class Engine:
             return JSONResponse(content={"error": "Usuario no encontrado"}, status_code=404)
 
     def create_user(self, nombre, telefono, edad, contrasena):
-        user_id = self.dal.create_user(nombre, telefono, edad, contrasena)
-        token = self.generate_token(user_id)
+        lastId:int = self.dal.create_user(nombre, telefono, edad, contrasena)
+        token = self.generate_token(lastId)
+        self.dal.insert_token(lastId,token)
+
         return JSONResponse(content={"token": token})
 
     def get_user_by_id(self, token, user_id):
@@ -106,7 +108,7 @@ class Engine:
         persona_db = self.dal.get_user_by_id(user_id)
         if persona_db:
             persona = Persona(
-                Id=persona_db[0],
+                id=persona_db[0],
                 nombre=persona_db[1],
                 telefono=persona_db[2],
                 edad=persona_db[3],

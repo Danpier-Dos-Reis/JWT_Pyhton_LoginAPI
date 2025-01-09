@@ -13,18 +13,36 @@ class DAL:
         self.cursor = self.connection.cursor()
 
     def create_user(self, nombre, telefono, edad, passw):
-        # Encrypt the password using SHA256
-        encrypted_passw = hashlib.sha256(passw.encode()).hexdigest()
-        
-        query = """
-        INSERT INTO Persona (nombre, telefono, edad, passw)
-        VALUES (?, ?, ?, ?)
-        """
-        self.cursor.execute(query, (nombre, telefono, edad, encrypted_passw))
-        self.connection.commit()
-        return self.cursor.lastrowid
 
-    def get_all_users(self):
+        try:
+            # Encrypt the password using SHA256
+            encrypted_passw = hashlib.sha256(passw.encode()).hexdigest()
+
+            self.cursor.execute("BEGIN TRANSACTION")
+            query = """
+            INSERT INTO Persona (nombre, telefono, edad, passw)
+            VALUES (?, ?, ?, ?)
+            """
+            self.cursor.execute(query, (nombre, telefono, edad, encrypted_passw))
+            self.connection.commit()
+
+            return self.cursor.lastrowid
+        except sqlite3.Error as e:
+            self.connection.rollback()
+            return f'Error al insertar los datos: {e}'
+        
+    def insert_token(self, user_id, token):
+        try:
+            self.cursor.execute("BEGIN TRANSACTION")
+            query = """INSERT INTO UserToken (id_user, user_token) VALUES (?,?)"""
+            self.cursor.execute(query,(user_id,token))
+            self.connection.commit()
+
+        except sqlite3.Error as e:
+            self.connection.rollback()
+            return f'Error al insertar los datos: {e}'
+
+    def get_all_users(self):        
         query = "SELECT * FROM Persona"
         self.cursor.execute(query)
         return self.cursor.fetchall()

@@ -4,7 +4,7 @@
 from pydantic import BaseModel
 
 class Persona(BaseModel):
-    Id: int
+    id: int
     nombre: str
     telefono: str | None = None
     edad: int | None = None
